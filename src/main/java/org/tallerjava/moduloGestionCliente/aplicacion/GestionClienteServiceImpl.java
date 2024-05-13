@@ -115,13 +115,13 @@ public class GestionClienteServiceImpl implements GestionClienteService {
             usuario.getClienteTelepeaje().setCuentaPostPaga(nuevaCuenta);
 
             idCuentas++;
-        }else{
+        }
             cuentaCliente.setTarjeta(tarjeta);
             AsociarTarjeta at = new AsociarTarjeta();
             at.setTarjeta(tarjeta);
             at.setUsuario(usuario);
             asociarTarjetaEvent.fire(at);
-        }
+
 
     }
     @Override
