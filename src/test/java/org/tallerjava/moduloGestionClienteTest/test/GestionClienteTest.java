@@ -1,5 +1,5 @@
 
-package org.tallerjava.moduloGestionClienteTest;
+package org.tallerjava.moduloGestionClienteTest.test;
 
 import jakarta.inject.Inject;
 import org.jboss.weld.junit5.auto.AddPackages;
