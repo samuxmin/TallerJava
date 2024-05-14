@@ -40,6 +40,7 @@ public class GestionClienteServiceImpl implements GestionClienteService {
     public void altaClienteTelepeaje(Usuario usuario){
         ClienteTelepeaje nuevoClienteTelepeaje = new ClienteTelepeaje();
         nuevoClienteTelepeaje.setCuentaPrePaga(new CuentaPREPaga());
+        nuevoClienteTelepeaje.setCuentaPostPaga(new CuentaPOSTPaga());
         usuario.setClienteTelepeaje(nuevoClienteTelepeaje);
         usuariosRepo.addUsuario(usuario);
         crearUsuarioEvent.fire(usuario);
@@ -121,8 +122,6 @@ public class GestionClienteServiceImpl implements GestionClienteService {
             at.setTarjeta(tarjeta);
             at.setUsuario(usuario);
             asociarTarjetaEvent.fire(at);
-
-
     }
     @Override
     public List<PasadaPorPeaje> consultarPasadas(Usuario usuario, LocalDate fechaInicio, LocalDate fechaFin){
