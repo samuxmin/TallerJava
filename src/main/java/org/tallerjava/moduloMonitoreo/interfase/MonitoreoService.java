@@ -1,41 +1,19 @@
 package org.tallerjava.moduloMonitoreo.interfase;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Event;
-import jakarta.inject.Inject;
-import org.tallerjava.moduloMonitoreo.aplicacion.CobroSucive;
-import org.tallerjava.moduloMonitoreo.aplicacion.CobroTarjeta;
-import org.tallerjava.moduloMonitoreo.aplicacion.PasajeVehiculo;
+
 import org.tallerjava.moduloGestionCliente.dominio.eventos.SaldoInsuficiente;
+import org.tallerjava.moduloPeaje.interfase.evento.out.PasajeVehiculo;
 
-@ApplicationScoped
-public class MonitoreoService {
-
-    @Inject
-    private Event<PasajeVehiculo> pasajeVehiculoEvent;
-    private Event<CobroSucive> cobroSuciveEvent;
-    private Event<CobroTarjeta> cobroTarjetaEvent;
-    private Event<CobroTarjeta> cobroTarjetaRechazadoEvent;
-    private Event<SaldoInsuficiente> saldoInsuficienteEvent;
+public interface MonitoreoService {
 
 
-    public void notificarPasajeVehiculo (PasajeVehiculo pasajeVehiculo) {
+    public void notificarPasajeVehiculo(PasajeVehiculo pasajeVehiculo);
 
-        pasajeVehiculoEvent.fire(pasajeVehiculo);
-    }
-    public void notificarCobroSucive (CobroSucive cobroSucive) {
-        cobroSuciveEvent.fire(cobroSucive);
-    }
+    public void notificarCobroSucive();
 
-    public void notificarCobroTarjeta (CobroTarjeta cobroTarjeta) {
-        cobroTarjetaEvent.fire(cobroTarjeta);
-    }
+    public void notificarCobroTarjeta();
 
-    public void notificarCobroTarjetaRechazado (CobroTarjeta cobroTarjeta) {
-        cobroTarjetaRechazadoEvent.fire(cobroTarjeta);
-    }
+    public void notificarCobroTarjetaRechazado();
 
-    public void notificarSaldoInsuficiete(SaldoInsuficiente si){
-        saldoInsuficienteEvent.fire(si);
-    }
+    public void notificarSaldoInsuficiete(SaldoInsuficiente si);
 }

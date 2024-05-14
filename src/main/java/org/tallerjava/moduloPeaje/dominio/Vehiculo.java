@@ -11,6 +11,8 @@ public class Vehiculo {
         this.vinculo = v;
     }
 
+
+    
     public Vehiculo() {
         this.pasadasPorPeaje = new ArrayList<PasadaPorPeaje>();
     }

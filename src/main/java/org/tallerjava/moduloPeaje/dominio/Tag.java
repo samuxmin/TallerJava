@@ -1,20 +1,20 @@
 package org.tallerjava.moduloPeaje.dominio;
 
 public class Tag {
-    private String id;
+    private int id;
 
-    public Tag(String id) {
+    public Tag(int id) {
         this.id = id;
     }
     public Tag() {
 
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

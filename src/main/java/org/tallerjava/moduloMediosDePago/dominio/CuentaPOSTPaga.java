@@ -22,18 +22,6 @@ public class CuentaPOSTPaga extends Cuenta{
         this.tarjeta = tarjeta;
     }
 
-    /* 
-    //TODO PREGUNTARLE AL PROFE SI LA TARJETA TIENE SALDO.
 
-    public void agregarPago(PasadaPorPeaje pasada){
-
-        if (tarjeta.getSaldo() >= pasada.getCosto()){
-
-            tarjeta.setSaldo(tarjeta.getSaldo() - pasada.getCosto());
-            pasada.setPagada(true); //PROBANDO COSAS 1
-            
-        }
-    }
-    */
 
 }

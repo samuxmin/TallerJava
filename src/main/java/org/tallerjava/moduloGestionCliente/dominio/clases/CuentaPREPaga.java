@@ -3,7 +3,7 @@ package org.tallerjava.moduloGestionCliente.dominio.clases;
 import java.time.LocalDate;
 
 public class CuentaPREPaga extends Cuenta {
-    private float saldo;
+    private double saldo;
     public CuentaPREPaga() {
     }
 
@@ -12,11 +12,11 @@ public class CuentaPREPaga extends Cuenta {
         this.saldo = saldo;
     }
 
-    public float getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(float saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 }

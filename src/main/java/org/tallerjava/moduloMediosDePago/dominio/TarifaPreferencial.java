@@ -1,7 +1,7 @@
 package org.tallerjava.moduloMediosDePago.dominio;
 
 public class TarifaPreferencial extends Tarifa {
-    public TarifaPreferencial(int monto) {
+    public TarifaPreferencial(double monto) {
         super(monto);
     }
 

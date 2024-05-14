@@ -3,6 +3,7 @@ package org.tallerjava.moduloMediosDePago.dominio;
 import java.time.LocalDate;
 
 public class Cuenta {
+    
     private int nroCuenta;
     private LocalDate fechaApertura;
 

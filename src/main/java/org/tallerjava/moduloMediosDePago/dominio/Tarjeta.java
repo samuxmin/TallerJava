@@ -38,4 +38,10 @@ public class Tarjeta {
     public void setNro(int nro) {
         this.nro = nro;
     }
+
+    public boolean esValida() {
+        return LocalDate.now().isBefore(fechaVto);
+    }
+
+
 }

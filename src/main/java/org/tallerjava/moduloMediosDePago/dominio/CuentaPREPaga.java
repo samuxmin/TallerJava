@@ -3,20 +3,20 @@ package org.tallerjava.moduloMediosDePago.dominio;
 import java.time.LocalDate;
 
 public class CuentaPREPaga extends Cuenta {
-    private float saldo;
+    private double saldo;
     public CuentaPREPaga() {
     }
 
-    public CuentaPREPaga(LocalDate fechaApertura, int nroCuenta, float saldo) {
+    public CuentaPREPaga(LocalDate fechaApertura, int nroCuenta, double saldo) {
         super(fechaApertura, nroCuenta);
         this.saldo = saldo;
     }
 
-    public float getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(int saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 }

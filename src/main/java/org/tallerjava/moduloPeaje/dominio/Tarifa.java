@@ -1,20 +1,5 @@
 package org.tallerjava.moduloPeaje.dominio;
 
-public class Tarifa {
-    private double monto;
-
-    public Tarifa(double monto) {
-        this.monto = monto;
-    }
-
-    public Tarifa() {
-    }
-
-    public double getMonto() {
-        return monto;
-    }
-
-    public void setMonto(double monto) {
-        this.monto = monto;
-    }
+public abstract class Tarifa {
+    protected double valor;
 }

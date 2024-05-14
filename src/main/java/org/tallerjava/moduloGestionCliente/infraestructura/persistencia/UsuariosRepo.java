@@ -27,4 +27,17 @@ public class UsuariosRepo {
         }
         return null;
     }
+    public Vehiculo getVehiculoByTag(String tag){
+        return getVehiculoByTag(new Tag(tag));
+    }
+    public Vehiculo getVehiculoByTag(Tag tag){
+        Usuario usr = getUsuarioByTag(tag);
+        for(Vinculo v : usr.getVinculosVehiculos()){
+            Vehiculo vehiculo = v.getVehiculo();
+            if(vehiculo.getTag().equals(tag)){
+                return vehiculo;
+            }
+        }
+        return null;
+    }
 }
