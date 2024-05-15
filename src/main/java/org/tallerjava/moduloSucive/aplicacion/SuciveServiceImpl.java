@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.enterprise.event.Event;
 import lombok.Getter;
 import lombok.Setter;
 import org.tallerjava.moduloSucive.dominio.repositorio.*;
@@ -12,6 +13,7 @@ import org.tallerjava.moduloSucive.dominio.repositorio.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.tallerjava.moduloSucive.interfase.eventos.PagoSucive;
 
 @ApplicationScoped
 public class SuciveServiceImpl implements SuciveService {
@@ -25,12 +27,15 @@ public class SuciveServiceImpl implements SuciveService {
     private void inicializar() {
 
     }
+    @Inject
+    private Event<PagoSucive> pagoEvent;
 
     @Override
     public boolean notificarPago(String matricula, double importe) {
         Usuario usuario = repo.buscarUsuarioPorMatricula(matricula);
         if (usuario != null) {
             repo.crearPasadaPorPeaje(usuario, importe);
+            pagoEvent.fire(new PagoSucive(matricula, importe));
             return true;
         }
         return false;

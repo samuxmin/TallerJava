@@ -1,5 +1,6 @@
 package org.tallerjava.moduloMediosDePago.aplicacion;
 
+import jakarta.enterprise.event.Event;
 import jakarta.enterprise.event.Observes;
 import org.tallerjava.moduloGestionCliente.dominio.eventos.AsociarTarjeta;
 import org.tallerjava.moduloMediosDePago.dominio.*;
@@ -12,14 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.inject.Inject;
+import org.tallerjava.moduloMediosDePago.interfase.eventos.CobroRechazado;
+import org.tallerjava.moduloMediosDePago.interfase.eventos.CobroTarjeta;
 
 @ApplicationScoped
 public class MetodoPagoServiceImpl implements MetodoPagoService {
     @Inject
     private PagoRepositorio pagoRepositorio;
 
+    @Inject
+    Event<CobroTarjeta> cobroTarjetaEvent;
+    @Inject
+    Event<CobroRechazado> cobroRechazadoEvent;
+
     @Override
-    public boolean altaCliente(AsociarTarjeta asociarTarjeta) {
+    public boolean altaCliente(@Observes AsociarTarjeta asociarTarjeta) {
         Usuario usuario = new Usuario();
         usuario.setEmail(asociarTarjeta.getUsuario().getEmail());
         usuario.setCi(asociarTarjeta.getUsuario().getCi());
@@ -49,16 +57,19 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
     public boolean notificarPago(String ci, String tag, double importe, int nroTarjeta) {
        Usuario usuario = pagoRepositorio.getUsuario(ci);
         if (usuario == null || usuario.getClienteTelepeaje() == null) {
+            cobroRechazadoEvent.fire(new CobroRechazado(ci,nroTarjeta,importe,"Cuenta Postpaga no registrada para usuario"));
             return false;
         }
 
         CuentaPOSTPaga cuentaPostPaga = usuario.getClienteTelepeaje().getCuentaPostPaga();
         if (cuentaPostPaga == null) {
+            cobroRechazadoEvent.fire(new CobroRechazado(ci,nroTarjeta,importe,"Cuenta Postpaga no registrada para usuario"));
             return false;
         }
 
         Tarjeta tarjeta = cuentaPostPaga.getTarjeta();
         if (tarjeta == null || !tarjeta.esValida() || tarjeta.getNro() != nroTarjeta) {
+            cobroRechazadoEvent.fire(new CobroRechazado(ci,nroTarjeta,importe,"Tarjeta invalida"));
             return false;
         }
 
@@ -67,6 +78,8 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
 
         Pago pago = new Pago(usuario, vehiculo, importe, tarjeta, LocalDate.now());
         pagoRepositorio.registrarPago(pago);
+        CobroTarjeta cobroTarjeta = new CobroTarjeta(ci,nroTarjeta,importe);
+        cobroTarjetaEvent.fire(cobroTarjeta);
         return true;
     }
 

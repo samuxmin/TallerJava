@@ -133,7 +133,7 @@ public class GestionClienteServiceImpl implements GestionClienteService {
             AsociarTarjeta at = new AsociarTarjeta();
             at.setTarjeta(tarjeta);
             at.setUsuario(usuario);
-            pagos.altaCliente(at);
+            asociarTarjetaEvent.fire(at);
 
     }
     @Override

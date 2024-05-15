@@ -10,6 +10,8 @@ import org.tallerjava.moduloGestionCliente.interfase.local.GestionClienteService
 import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
 import org.tallerjava.moduloMediosDePago.dominio.repositorio.PagoRepositorio;
 import org.tallerjava.moduloMediosDePago.intraestructura.persistencia.PagoRepositorioImpl;
+import org.tallerjava.moduloMonitoreo.aplicacion.MonitoreoServiceImpl;
+import org.tallerjava.moduloMonitoreo.interfase.MonitoreoService;
 import org.tallerjava.moduloPeaje.aplicacion.PeajeService;
 import org.tallerjava.moduloPeaje.aplicacion.ServicioPeajeImpl;
 import org.tallerjava.moduloPeaje.infraestructura.persistencia.PeajeRepositorioImpl;
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AddPackages(PublicadorEventoImpl.class)
 @AddPackages(MetodoPagoServiceImpl.class)
 @AddPackages(PagoRepositorioImpl.class)
+@AddPackages(MonitoreoServiceImpl.class)
 public class CasosDeUsoTest {
     @Inject
     GestionClienteService cliente;
@@ -37,19 +40,21 @@ public class CasosDeUsoTest {
     @Inject
     PeajeService peaje;
 
+    @Inject
+    MonitoreoService monitoreo;
 
     @Test
     public void pasajeVehiculoExtranjeroPREPagoTest() {
         Usuario usuario = new Usuario();
-        usuario.setCi("123");
+        usuario.setCi("ci123");
         cliente.altaClienteTelepeaje(usuario);
        // cliente.cargarSaldo(usuario,200000);
         VehiculoExtranjero vehiculo = new VehiculoExtranjero();
-        vehiculo.setTag(new Tag("123"));
+        vehiculo.setTag(new Tag("tag123"));
         cliente.vincularVehiculo(vehiculo,usuario);
-        assertFalse(peaje.estaHabilitadoSincronico("123",""));
+        assertFalse(peaje.estaHabilitadoSincronico("tag123",""));
         cliente.cargarSaldo(usuario,200000);
-        assertTrue(peaje.estaHabilitadoSincronico("123",""));
+        assertTrue(peaje.estaHabilitadoSincronico("tag123",""));
     }
     @Test
     public void pasajeVehiculoExtranjeroPOSTPagoTest() {
