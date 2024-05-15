@@ -12,4 +12,5 @@ public interface PeajeRepositorio {
     public Vehiculo findByMatricula(String matricula);
     public TarifaPreferencial obtenerTarifaPreferencial();
     public TarifaComun obtenerTarifaComun();
+    public void addVehiculo(Vehiculo vehiculo);
 }

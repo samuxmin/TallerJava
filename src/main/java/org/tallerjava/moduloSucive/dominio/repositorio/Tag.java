@@ -1,20 +1,20 @@
 package org.tallerjava.moduloSucive.dominio.repositorio;
 
 public class Tag {
-    private int id;
+    private String id;
 
-    public Tag(int id) {
+    public Tag(String id) {
         this.id = id;
     }
     public Tag() {
 
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

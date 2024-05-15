@@ -21,14 +21,15 @@ public class GestionClienteServiceImpl implements GestionClienteService {
     private UsuariosRepo usuariosRepo = new UsuariosRepo();
 
     int idCuentas = 0;
-
+    @Inject
+    private MetodoPagoService pagos;
 
     @Inject
     private Event<SaldoInsuficiente> saldoInsuficienteEvent;
     @Inject
     private Event<PagoCliente> pagoClienteEvent;
     @Inject
-    private Event<Vinculo> vinculoEvent;
+    private Event<VinculoEvent> vinculoEvent;
     @Inject
     private Event<DesvincularVehiculo> desvincularVehiculoEvent;
     @Inject
@@ -52,10 +53,19 @@ public class GestionClienteServiceImpl implements GestionClienteService {
     public void vincularVehiculo(Vehiculo vehiculo, Usuario usuario){
         Vinculo nuevoVinculo = new Vinculo(true,LocalDate.now(),vehiculo,usuario);
         usuario.getVinculosVehiculos().add(nuevoVinculo);
-        vinculoEvent.fire(nuevoVinculo);
 
-        //persistir??
+        if(vehiculo instanceof  VehiculoNacional){
+            VehiculoNacional vn = (VehiculoNacional) vehiculo;
+            vinculoEvent.fire(new VinculoEvent(usuario.getCi(),vn.getTag().getId(),vn.getMatricula().getNroMatricula(),"nacional"));
+
+        }else if(vehiculo instanceof  VehiculoExtranjero){
+                VehiculoExtranjero ve = (VehiculoExtranjero) vehiculo;
+                vinculoEvent.fire(new VinculoEvent(usuario.getCi(),ve.getTag().getId(),"","extranjero"));
+        }else {
+            throw new RuntimeException("el vehiculo no es extranjero ni nacional : v");
+        }
     }
+
     @Override
     public void desvincularVehiculo(Usuario usr, Vehiculo v){
         Vinculo vinculoBorrar = null;
@@ -123,7 +133,8 @@ public class GestionClienteServiceImpl implements GestionClienteService {
             AsociarTarjeta at = new AsociarTarjeta();
             at.setTarjeta(tarjeta);
             at.setUsuario(usuario);
-            asociarTarjetaEvent.fire(at);
+            pagos.altaCliente(at);
+
     }
     @Override
     public List<PasadaPorPeaje> consultarPasadas(Usuario usuario, LocalDate fechaInicio, LocalDate fechaFin){
@@ -207,9 +218,9 @@ public class GestionClienteServiceImpl implements GestionClienteService {
             //throw new RuntimeException("Cuenta no existente");
         }else{
             if(cuentaCliente.getTarjeta( ) != null){
-                PagoCliente pago =new PagoCliente(TipoPago.POSTPAGO,importe,usuario);
-                MetodoPagoService metodoPagoService = new MetodoPagoServiceImpl();
-                return metodoPagoService.notificarPago(usuario.getCi(),vehiculo.getTag().getId(),importe,cuentaCliente.getTarjeta().getNro());
+               // PagoCliente pago =new PagoCliente(TipoPago.POSTPAGO,importe,usuario);
+
+                return pagos.notificarPago(usuario.getCi(),vehiculo.getTag().getId(),importe,cuentaCliente.getTarjeta().getNro());
             }else{
                 return false;
                 //throw new RuntimeException("Tarjeta no existente");

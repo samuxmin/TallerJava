@@ -7,46 +7,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.tallerjava.moduloSucive.dominio.repositorio.DataTipoCobro;
-import org.tallerjava.moduloSucive.dominio.repositorio.Matricula;
-import org.tallerjava.moduloSucive.dominio.repositorio.PasadaPorPeaje;
-import org.tallerjava.moduloSucive.dominio.repositorio.RangoFechas;
-import org.tallerjava.moduloSucive.dominio.repositorio.SuciveRepositorio;
-import org.tallerjava.moduloSucive.dominio.repositorio.Usuario;
-import org.tallerjava.moduloSucive.dominio.repositorio.Vehiculo;
-import org.tallerjava.moduloSucive.dominio.repositorio.VehiculoNacional;
-import org.tallerjava.moduloSucive.dominio.repositorio.Vinculo;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import org.tallerjava.moduloGestionCliente.dominio.eventos.VinculoEvent;
+import org.tallerjava.moduloSucive.dominio.repositorio.*;
+
+@ApplicationScoped
 
 public class SuciveRepositorioImpl implements SuciveRepositorio {
 
-    public List<Usuario> usr;
-    public DataTipoCobro.Tipo tipoCobro;
-    public Matricula matricula;
-    public LocalDate fecha;
-    public Vehiculo vehiculo;
-    public PasadaPorPeaje pasadaPorPeaje;
-    public List<PasadaPorPeaje> pasadasPorPeaje;
-    public Vinculo vinculo;
-    public List<Vinculo> vinculosVehiculos;
-    public Usuario usuario;
-    public VehiculoNacional vehiculoNacional;
-    public RangoFechas rangoFechas;
+    private List<Usuario> usr = new ArrayList<>();
+
 
     public SuciveRepositorioImpl() {
-        this.usr = new ArrayList<>();
-        this.tipoCobro = DataTipoCobro.Tipo.SUCIVE;
-        this.matricula = new Matricula("ABCD");
-        this.fecha = LocalDate.now();
-        this.vehiculo = new Vehiculo(new ArrayList<>(), new Vinculo(true, fecha, null));
-        this.pasadaPorPeaje = new PasadaPorPeaje(10.5, fecha, tipoCobro, vehiculo);
-        this.pasadasPorPeaje = new ArrayList<>();
-        this.pasadasPorPeaje.add(pasadaPorPeaje);
-        this.vinculo = new Vinculo(true, fecha, vehiculo);
-        this.vinculosVehiculos = new ArrayList<>();
-        this.vinculosVehiculos.add(vinculo);
-        this.usuario = new Usuario("correo@example.com", "Facundo", "12345678", vinculosVehiculos, null);
-        this.vehiculoNacional = new VehiculoNacional(pasadasPorPeaje, vinculo, matricula, null);
-        this.rangoFechas = new RangoFechas(LocalDate.of(2022, 1, 1), LocalDate.of(2022, 12, 31));
+
+    }
+
+    public void addUsuario(@Observes VinculoEvent vinculoEvent){
+        if(vinculoEvent.getTipo().equals("nacional")){
+            Usuario usuario = new Usuario();
+            usuario.setCi(vinculoEvent.getCiUSr());
+
+            VehiculoNacional vehiculo = new VehiculoNacional();
+            vehiculo.setTag(new Tag(vinculoEvent.getTag()));
+            vehiculo.setMatricula(new Matricula(vinculoEvent.getMatricula()));
+
+            Vinculo vinculo = new Vinculo();
+            vinculo.setActivo(true);
+            vinculo.setVehiculo(vehiculo);
+            vinculo.setFechaIni(LocalDate.now());
+
+            usuario.getVinculosVehiculos().add(vinculo);
+
+            usr.add(usuario);
+
+        }
     }
 
     @Override

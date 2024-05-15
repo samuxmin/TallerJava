@@ -1,12 +1,11 @@
 package org.tallerjava.moduloPeaje.aplicacion;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteService;
-import org.tallerjava.moduloPeaje.dominio.TarifaComun;
-import org.tallerjava.moduloPeaje.dominio.TarifaPreferencial;
-import org.tallerjava.moduloPeaje.dominio.Vehiculo;
-import org.tallerjava.moduloPeaje.dominio.VehiculoNacional;
+import org.tallerjava.moduloGestionCliente.dominio.eventos.VinculoEvent;
+import org.tallerjava.moduloPeaje.dominio.*;
 import org.tallerjava.moduloPeaje.dominio.repo.PeajeRepositorio;
 import org.tallerjava.moduloPeaje.interfase.evento.out.PublicadorEvento;
 import org.tallerjava.moduloSucive.aplicacion.SuciveService;
@@ -17,7 +16,7 @@ public class ServicioPeajeImpl implements PeajeService {
     private PeajeRepositorio repo;
 
     @Inject
-    private PublicadorEvento evento;
+    private PublicadorEvento evento;// = new PublicadorEvento();
 
     @Inject
     GestionClienteService gestionCliente;
@@ -32,15 +31,29 @@ public class ServicioPeajeImpl implements PeajeService {
         Vehiculo vehiculo = existeVehiculo(tag, matricula);
         if (vehiculo != null) {
             if (vehiculo instanceof VehiculoNacional) {
-                mandarAQueueDePagos(vehiculo);
-                habilitado = true;
+                //mandarAQueueDePagos(vehiculo);
+                habilitado = procesarVehiculoNacional(tag,vehiculo);
             } else {
                 habilitado = procesarVehiculoExtranjero(tag, vehiculo);
             }
         }
         return habilitado;
     }
+    private void addVehiculo(@Observes VinculoEvent vinculoEvent){
+        Vehiculo vehiculo = null;
+        if(vinculoEvent.getTipo() == "extranjero"){
+            VehiculoExtranjero vehiculoE = new VehiculoExtranjero();
+            vehiculoE.setTag(new Tag(vinculoEvent.getTag()));
+            vehiculo = vehiculoE;
+        }else{
+            VehiculoNacional vehiculoE = new VehiculoNacional();
+            vehiculoE.setTag(new Tag(vinculoEvent.getTag()));
+            vehiculoE.setMatricula(new Matricula(vinculoEvent.getMatricula()));
 
+            vehiculo = vehiculoE;
+        }
+            repo.addVehiculo(vehiculo);
+    }
     private boolean  procesarVehiculoExtranjero(String tag, Vehiculo vehiculo) {
         evento.publicarPasajeVehiculo("Paso vehiculo con tag " + tag);
         boolean habilitado = false;
@@ -63,9 +76,6 @@ public class ServicioPeajeImpl implements PeajeService {
     private boolean  procesarVehiculoNacional(String tag, Vehiculo vehiculo) {
         boolean habilitado = false;
         TarifaPreferencial tarifa = repo.obtenerTarifaPreferencial();
-
-            //según las reglas del negocio, lo primero es cobrar con PrePago
-
             habilitado = gestionCliente.realizarPrePago(tarifa.getValor(),tag);
             if (!habilitado) {
                 //fallo el cobro prepago, intento con la tarjeta (postPago)
@@ -73,15 +83,11 @@ public class ServicioPeajeImpl implements PeajeService {
             }
 
         if (!habilitado) {
-            if(vehiculo instanceof VehiculoNacional) {
                 VehiculoNacional vehiculoNacional =(VehiculoNacional) vehiculo;
                 evento.publicarPasajeVehiculo("Paso vehiculo nacional tag: " + tag + " matricula: " + vehiculoNacional.getMatricula().getNroMatricula());
                 habilitado = suciveService.notificarPago(vehiculoNacional.getMatricula().getNroMatricula(), repo.obtenerTarifaComun().getValor());
-            }else{
-                evento.publicarPasajeVehiculo("Paso vehiculo con tag: " + tag);
-
             }
-        }
+        System.out.println(tag);
         return habilitado;
     }
 

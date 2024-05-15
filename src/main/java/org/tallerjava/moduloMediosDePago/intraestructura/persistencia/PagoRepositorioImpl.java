@@ -1,13 +1,16 @@
 package org.tallerjava.moduloMediosDePago.intraestructura.persistencia;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
 import org.tallerjava.moduloMediosDePago.dominio.*;
 import org.tallerjava.moduloMediosDePago.dominio.repositorio.PagoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
-
+@Default
+@ApplicationScoped
 public class PagoRepositorioImpl implements PagoRepositorio {
-    public List<Pago> pagos = new ArrayList<>();
-    public List<Usuario> usuarios = new ArrayList<>();
+    private List<Pago> pagos = new ArrayList<>();
+    private List<Usuario> usuarios = new ArrayList<>();
 
     @Override
     public void registrarPago(Pago pago) {
@@ -61,8 +64,9 @@ public class PagoRepositorioImpl implements PagoRepositorio {
 
     @Override
     public Usuario getUsuario(String ci) {
+
         for (Usuario usuario : usuarios) {
-            if (usuario.getCi().equals(ci)) {
+            if (usuario.getCi() == ci) {
                 return usuario;
             }
         }
@@ -70,6 +74,7 @@ public class PagoRepositorioImpl implements PagoRepositorio {
     }
     @Override
     public void registrarUsuario(Usuario usuario) {
+
         usuarios.add(usuario);
     }
 }

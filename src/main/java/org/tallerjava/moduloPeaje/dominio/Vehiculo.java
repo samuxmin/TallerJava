@@ -17,6 +17,9 @@ public class Vehiculo {
         this.pasadasPorPeaje = new ArrayList<PasadaPorPeaje>();
     }
 
+    public Tag getTag(){
+        return null;
+    }
     public List<PasadaPorPeaje> getPasadasPorPeaje() {
         return pasadasPorPeaje;
     }

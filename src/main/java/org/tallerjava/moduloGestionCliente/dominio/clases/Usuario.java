@@ -1,12 +1,13 @@
 package org.tallerjava.moduloGestionCliente.dominio.clases;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario {
     private String ci;
     private String nombre;
     private String email;
-    private List<Vinculo> vinculosVehiculos;
+    private List<Vinculo> vinculosVehiculos = new ArrayList<>();
     private ClienteTelepeaje clienteTelepeaje;
 
     public Usuario(String email, String nombre, String ci, List<Vinculo> vinculosVehiculos, ClienteTelepeaje clienteTelepeaje) {
