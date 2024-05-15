@@ -14,6 +14,7 @@ import java.util.List;
 
 @ApplicationScoped
 public class MonitoreoServiceImpl implements MonitoreoService {
+
     List<PasajeVehiculo> pasajeVehiculoList = new ArrayList<>();
     List<PagoSucive> pagoSuciveList = new ArrayList<>();
     List<CobroRechazado> cobroRechazadoList = new ArrayList<>();

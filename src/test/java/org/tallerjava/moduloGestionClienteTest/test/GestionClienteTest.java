@@ -8,6 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.tallerjava.moduloGestionCliente.interfase.local.GestionClienteServiceImpl;
 import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteService;
 import org.tallerjava.moduloGestionCliente.dominio.clases.*;
+import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
+import org.tallerjava.moduloMediosDePago.intraestructura.persistencia.PagoRepositorioImpl;
+import org.tallerjava.moduloMonitoreo.aplicacion.MonitoreoServiceImpl;
+import org.tallerjava.moduloPeaje.aplicacion.ServicioPeajeImpl;
+import org.tallerjava.moduloPeaje.infraestructura.persistencia.PeajeRepositorioImpl;
+import org.tallerjava.moduloPeaje.interfase.evento.out.PublicadorEventoImpl;
+import org.tallerjava.moduloSucive.aplicacion.SuciveServiceImpl;
+import org.tallerjava.moduloSucive.infraestructura.persistencia.SuciveRepositorioImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoWeld
 
 @AddPackages(GestionClienteServiceImpl.class)
+@AddPackages(MetodoPagoServiceImpl.class)
+@AddPackages(PagoRepositorioImpl.class)
 public class GestionClienteTest {
     @Inject
     GestionClienteService gestionClienteService ;//= new GestionClienteServiceImpl();

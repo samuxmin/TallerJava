@@ -12,4 +12,5 @@ public interface SuciveRepositorio {
     public List<PasadaPorPeaje> obtenerPasadasEnRango(RangoFechas rangoFechas);
     public Map<LocalDate, Double> calcularImportesPorDia(List<PasadaPorPeaje> pasadasPorPeaje);
     public List<PasadaPorPeaje> convertirAMapas(Map<LocalDate, Double> importesPorDia);
+    public void addUsuario(Usuario u);
 }

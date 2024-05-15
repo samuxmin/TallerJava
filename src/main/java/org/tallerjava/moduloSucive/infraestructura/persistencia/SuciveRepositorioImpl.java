@@ -44,6 +44,9 @@ public class SuciveRepositorioImpl implements SuciveRepositorio {
         }
     }
 
+    public void addUsuario(Usuario u){
+        usr.add(u);
+    }
     @Override
     public Vehiculo findByMatricula(String matricula) {
         return null;

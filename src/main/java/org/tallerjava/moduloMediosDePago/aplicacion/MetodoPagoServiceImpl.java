@@ -26,6 +26,10 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
     @Inject
     Event<CobroRechazado> cobroRechazadoEvent;
 
+    public void setPagoRepositorio(PagoRepositorio pagoRepositorio) {
+        this.pagoRepositorio = pagoRepositorio;
+    }
+
     @Override
     public boolean altaCliente(@Observes AsociarTarjeta asociarTarjeta) {
         Usuario usuario = new Usuario();
@@ -38,10 +42,9 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
         tarjeta.setNombre(asociarTarjeta.getTarjeta().getNombre());
         tarjeta.setNro(asociarTarjeta.getTarjeta().getNro());
 
-        /*if (pagoRepositorio.existeUsuario(usuario.getCi())) {
+        if (pagoRepositorio.existeUsuario(usuario.getCi())) {
             return false;
         }
-*/
         ClienteTelepeaje clienteTelepeaje = new ClienteTelepeaje();
         CuentaPOSTPaga cuentaPostPaga = new CuentaPOSTPaga();
         cuentaPostPaga.setTarjeta(tarjeta);
