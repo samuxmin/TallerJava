@@ -31,11 +31,15 @@ public class ComunicacionServiceImpl implements ComunicacionService {
     public void notificarInformacion(String ci, String informacion){
         Usuario usr = repo.getUsuario(ci);
         usr.getNotificaciones().add(informacion);
+        enviarMail(usr.getMail(), informacion);
     }
     public List<String> getNotificaciones(String ci){
         return repo.getUsuario(ci).getNotificaciones();
     }
     public void notificarTarjetaBloqueada(@Observes CobroRechazado cobroRechazado){
         notificarInformacion(cobroRechazado.getCiUsr(), "la tarjeta "+ cobroRechazado.getNroTarjeta() +" esta bloqueada");
+    }
+    public void enviarMail(String mail, String info){
+        //increible
     }
 }
