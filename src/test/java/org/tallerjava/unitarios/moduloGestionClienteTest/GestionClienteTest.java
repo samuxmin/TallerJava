@@ -1,21 +1,16 @@
 
-package org.tallerjava.moduloGestionClienteTest.test;
+package org.tallerjava.unitarios.moduloGestionClienteTest;
 
 import jakarta.inject.Inject;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.Test;
-import org.tallerjava.moduloGestionCliente.interfase.local.GestionClienteServiceImpl;
+import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteServiceImpl;
 import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteService;
 import org.tallerjava.moduloGestionCliente.dominio.clases.*;
+import org.tallerjava.moduloGestionCliente.infraestructura.persistencia.UsuariosRepoImpl;
 import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
 import org.tallerjava.moduloMediosDePago.intraestructura.persistencia.PagoRepositorioImpl;
-import org.tallerjava.moduloMonitoreo.aplicacion.MonitoreoServiceImpl;
-import org.tallerjava.moduloPeaje.aplicacion.ServicioPeajeImpl;
-import org.tallerjava.moduloPeaje.infraestructura.persistencia.PeajeRepositorioImpl;
-import org.tallerjava.moduloPeaje.interfase.evento.out.PublicadorEventoImpl;
-import org.tallerjava.moduloSucive.aplicacion.SuciveServiceImpl;
-import org.tallerjava.moduloSucive.infraestructura.persistencia.SuciveRepositorioImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AddPackages(GestionClienteServiceImpl.class)
 @AddPackages(MetodoPagoServiceImpl.class)
 @AddPackages(PagoRepositorioImpl.class)
+@AddPackages(UsuariosRepoImpl.class)
 public class GestionClienteTest {
     @Inject
     GestionClienteService gestionClienteService ;//= new GestionClienteServiceImpl();

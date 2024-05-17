@@ -1,15 +1,14 @@
-package org.tallerjava.moduloGestionCliente.interfase.local;
+package org.tallerjava.moduloGestionCliente.aplicacion;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
-import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteService;
 import org.tallerjava.moduloGestionCliente.dominio.clases.*;
 import org.tallerjava.moduloGestionCliente.dominio.eventos.*;
 import org.tallerjava.moduloGestionCliente.infraestructura.persistencia.UsuariosRepo;
+import org.tallerjava.moduloGestionCliente.infraestructura.persistencia.UsuariosRepoImpl;
 import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoService;
-import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +17,8 @@ import java.util.List;
 @Default
 @ApplicationScoped
 public class GestionClienteServiceImpl implements GestionClienteService {
-    private UsuariosRepo usuariosRepo = new UsuariosRepo();
+    @Inject
+    private UsuariosRepo usuariosRepo;
 
     int idCuentas = 0;
     @Inject

@@ -1,4 +1,4 @@
-package org.tallerjava;
+package org.tallerjava.integracion;
 
 import jakarta.inject.Inject;
 import org.jboss.weld.junit5.auto.AddPackages;
@@ -6,9 +6,9 @@ import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.Test;
 import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteService;
 import org.tallerjava.moduloGestionCliente.dominio.clases.*;
-import org.tallerjava.moduloGestionCliente.interfase.local.GestionClienteServiceImpl;
+import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteServiceImpl;
+import org.tallerjava.moduloGestionCliente.infraestructura.persistencia.UsuariosRepoImpl;
 import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
-import org.tallerjava.moduloMediosDePago.dominio.repositorio.PagoRepositorio;
 import org.tallerjava.moduloMediosDePago.intraestructura.persistencia.PagoRepositorioImpl;
 import org.tallerjava.moduloMonitoreo.aplicacion.MonitoreoServiceImpl;
 import org.tallerjava.moduloMonitoreo.interfase.MonitoreoService;
@@ -33,79 +33,80 @@ import static org.junit.jupiter.api.Assertions.*;
 @AddPackages(MetodoPagoServiceImpl.class)
 @AddPackages(PagoRepositorioImpl.class)
 @AddPackages(MonitoreoServiceImpl.class)
-public class CasosDeUsoTest {
+@AddPackages(UsuariosRepoImpl.class)
+public class IntegracionTest {
     @Inject
-    GestionClienteService cliente;
+    GestionClienteService moduloGestionCliente;
 
     @Inject
-    PeajeService peaje;
+    PeajeService moduloPeaje;
 
     @Inject
-    MonitoreoService monitoreo;
+    MonitoreoService moduloMonitoreo;
 
     @Test
     public void pasajeVehiculoExtranjeroPREPagoTest() {
         Usuario usuario = new Usuario();
         usuario.setCi("ci123");
-        cliente.altaClienteTelepeaje(usuario);
+        moduloGestionCliente.altaClienteTelepeaje(usuario);
        // cliente.cargarSaldo(usuario,200000);
         VehiculoExtranjero vehiculo = new VehiculoExtranjero();
         vehiculo.setTag(new Tag("tag123"));
-        cliente.vincularVehiculo(vehiculo,usuario);
-        assertFalse(peaje.estaHabilitadoSincronico("tag123",""));
-        cliente.cargarSaldo(usuario,200000);
-        assertTrue(peaje.estaHabilitadoSincronico("tag123",""));
+        moduloGestionCliente.vincularVehiculo(vehiculo,usuario);
+        assertFalse(moduloPeaje.estaHabilitadoSincronico("tag123",""));
+        moduloGestionCliente.cargarSaldo(usuario,200000);
+        assertTrue(moduloPeaje.estaHabilitadoSincronico("tag123",""));
     }
     @Test
     public void pasajeVehiculoExtranjeroPOSTPagoTest() {
         Usuario usuario = new Usuario();
         usuario.setCi("12345");
-        cliente.altaClienteTelepeaje(usuario);
+        moduloGestionCliente.altaClienteTelepeaje(usuario);
         // cliente.cargarSaldo(usuario,200000);
         VehiculoExtranjero vehiculo = new VehiculoExtranjero();
         vehiculo.setTag(new Tag("123"));
-        cliente.vincularVehiculo(vehiculo,usuario);
-        assertFalse(peaje.estaHabilitadoSincronico("123",""));
-        cliente.asociarTarjeta(usuario, new Tarjeta(LocalDate.parse("2026-02-21"),"",123));
-        assertTrue(peaje.estaHabilitadoSincronico("123",""));
+        moduloGestionCliente.vincularVehiculo(vehiculo,usuario);
+        assertFalse(moduloPeaje.estaHabilitadoSincronico("123",""));
+        moduloGestionCliente.asociarTarjeta(usuario, new Tarjeta(LocalDate.parse("2026-02-21"),"",123));
+        assertTrue(moduloPeaje.estaHabilitadoSincronico("123",""));
     }
     @Test
     public void pasajeVehiculoNacionalPREPagoTest() {
         Usuario usuario = new Usuario();
         usuario.setCi("123");
-        cliente.altaClienteTelepeaje(usuario);
+        moduloGestionCliente.altaClienteTelepeaje(usuario);
         // cliente.cargarSaldo(usuario,200000);
         VehiculoNacional vehiculo = new VehiculoNacional();
         vehiculo.setMatricula(new Matricula("123matr"));
         vehiculo.setTag(new Tag("123"));
-        cliente.vincularVehiculo(vehiculo,usuario);
+        moduloGestionCliente.vincularVehiculo(vehiculo,usuario);
        // assertFalse(peaje.estaHabilitadoSincronico("123",""));
-        cliente.cargarSaldo(usuario,200000);
-        assertTrue(peaje.estaHabilitadoSincronico("123","123matr"));
+        moduloGestionCliente.cargarSaldo(usuario,200000);
+        assertTrue(moduloPeaje.estaHabilitadoSincronico("123","123matr"));
     }
     @Test
     public void pasajeVehiculoNacionalPOSTPagoTest() {
         Usuario usuario = new Usuario();
         usuario.setCi("12345");
-        cliente.altaClienteTelepeaje(usuario);
+        moduloGestionCliente.altaClienteTelepeaje(usuario);
         // cliente.cargarSaldo(usuario,200000);
         VehiculoNacional vehiculo = new VehiculoNacional();
         vehiculo.setTag(new Tag("123"));
         vehiculo.setMatricula(new Matricula("123matr"));
-        cliente.vincularVehiculo(vehiculo,usuario);
+        moduloGestionCliente.vincularVehiculo(vehiculo,usuario);
         //assertFalse(peaje.estaHabilitadoSincronico("123",""));
-        cliente.asociarTarjeta(usuario, new Tarjeta(LocalDate.parse("2026-02-21"),"",123));
-        assertTrue(peaje.estaHabilitadoSincronico("123",""));
+        moduloGestionCliente.asociarTarjeta(usuario, new Tarjeta(LocalDate.parse("2026-02-21"),"",123));
+        assertTrue(moduloPeaje.estaHabilitadoSincronico("123",""));
     }
     @Test
     public void pasajeVehiculoSuciveTest(){
         Usuario usuario = new Usuario();
         usuario.setCi("12345");
-        cliente.altaClienteTelepeaje(usuario);
+        moduloGestionCliente.altaClienteTelepeaje(usuario);
         VehiculoNacional vehiculo = new VehiculoNacional();
         vehiculo.setTag(new Tag("123"));
         vehiculo.setMatricula(new Matricula("123matr"));
-        cliente.vincularVehiculo(vehiculo,usuario);
-        assertTrue(peaje.estaHabilitadoSincronico("123",""));
+        moduloGestionCliente.vincularVehiculo(vehiculo,usuario);
+        assertTrue(moduloPeaje.estaHabilitadoSincronico("123",""));
     }
 }

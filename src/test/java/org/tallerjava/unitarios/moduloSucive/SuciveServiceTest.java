@@ -1,4 +1,4 @@
-package org.tallerjava.moduloSucive;
+package org.tallerjava.unitarios.moduloSucive;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

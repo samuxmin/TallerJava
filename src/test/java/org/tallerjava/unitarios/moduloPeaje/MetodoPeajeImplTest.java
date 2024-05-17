@@ -1,4 +1,4 @@
-package org.tallerjava.moduloPeaje.test;
+package org.tallerjava.unitarios.moduloPeaje;
 
 import org.junit.jupiter.api.Test;
 import org.tallerjava.moduloPeaje.aplicacion.PeajeService;

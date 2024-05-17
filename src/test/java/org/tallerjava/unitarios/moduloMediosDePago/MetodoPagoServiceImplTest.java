@@ -1,10 +1,11 @@
-package org.tallerjava.moduloMediosDePago.test;
+package org.tallerjava.unitarios.moduloMediosDePago;
 
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.tallerjava.moduloGestionCliente.infraestructura.persistencia.UsuariosRepoImpl;
 import org.tallerjava.moduloMediosDePago.aplicacion.MetodoPagoServiceImpl;
 import org.tallerjava.moduloMediosDePago.dominio.ClienteTelepeaje;
 import org.tallerjava.moduloMediosDePago.dominio.CuentaPOSTPaga;
@@ -16,11 +17,10 @@ import org.tallerjava.moduloMediosDePago.dominio.Vehiculo;
 import org.tallerjava.moduloMediosDePago.dominio.repositorio.PagoRepositorio;
 import org.tallerjava.moduloMediosDePago.intraestructura.persistencia.PagoRepositorioImpl;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import org.tallerjava.moduloGestionCliente.dominio.eventos.AsociarTarjeta;
-import org.tallerjava.moduloGestionCliente.interfase.local.GestionClienteServiceImpl;
+import org.tallerjava.moduloGestionCliente.aplicacion.GestionClienteServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,7 +34,7 @@ import java.util.List;
 @AddPackages(GestionClienteServiceImpl.class)
 @AddPackages(MetodoPagoServiceImpl.class)
 @AddPackages(PagoRepositorioImpl.class)
-
+@AddPackages(UsuariosRepoImpl.class)
 public class MetodoPagoServiceImplTest {
 
     private PagoRepositorio pagoRepositorio;
