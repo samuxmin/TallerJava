@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.eclipse</groupId>
-	<artifactId>021-JakartaEE-XML</artifactId>
+	<artifactId>TallerJavaSuciveMock</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>021-JakartaEE-XML</name>
+	<name>TallerJavaSuciveMock</name>
 	<description>
 		Ejemplo de web service
 	</description>
@@ -45,7 +45,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>021-JakartaEE-XML</finalName>
+		<finalName>TallerJavaSuciveMock</finalName>
 		<plugins>
 			<!-- Nos permite lanzar el servidor y con la capacidad de hoydeploy (montorea
 			por cambios en los fuentes)  
@@ -64,6 +64,11 @@
 				<configuration>
 					<version>${wildfly.version}</version>
 					<server-config>standalone-full.xml</server-config>
+					<hostname>localhost</hostname>
+					<port>9992</port> <!-- Management port -->
+					<properties>
+						<port-offset>2</port-offset> <!-- This will increment all ports by 1 -->
+					</properties>
 				</configuration>
 			</plugin>
 			
