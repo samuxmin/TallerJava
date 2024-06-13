@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.tallerjava</groupId>
-	<artifactId>TallerJava</artifactId>
+	<artifactId>TallerJavaMediosPagoMock</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>TallerJava</name>
+	<name>TallerJavaMediosPagoMock</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -93,7 +93,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>TallerJava</finalName>
+		<finalName>TallerJavaMediosPagoMock</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -116,6 +116,9 @@
 				<configuration>
 					<version>${wildfly.version}</version>
 					<server-config>standalone-full.xml</server-config>
+					<jvmArguments>
+						<jvmArgument>-Djboss.socket.binding.port-offset=100</jvmArgument>
+					</jvmArguments>
 				</configuration>
 			</plugin>
 		</plugins>
